@@ -45,16 +45,43 @@ function createSnakeField(x) {
 function startGame() {
   const startingPoint = randomizer(15);
   console.log(startingPoint);
-  const test = document
-    .getElementsByClassName(startingPoint)[0]
-    .classList.add("snakeTile");
+  document.getElementsByClassName(startingPoint)[0].classList.add("snakeTile");
   //initialize array + array logic depending of keys
+  //listen to Keyboard WASD keys
   window.addEventListener("keydown", (e) => {
     if (e.key == "w") {
       console.log("up");
+      let newArray = startingPoint.split(" ");
+      let newR = parseInt(newArray[0].substring(1)) - 1;
+      let newPoint = `R${newR} ${newArray[1]}`;
+      document.getElementsByClassName(newPoint)[0].classList.add("snakeTile");
+      console.log(newPoint);
+    }
+    if (e.key == "a") {
+      console.log("left");
+      let newArray = startingPoint.split(" ");
+      let newC = parseInt(newArray[1].substring(1)) - 1;
+      let newPoint = `${newArray[0]} C${newC}`;
+      document.getElementsByClassName(newPoint)[0].classList.add("snakeTile");
+      console.log(newPoint);
+    }
+    if (e.key == "d") {
+      console.log("right");
+      let newArray = startingPoint.split(" ");
+      let newC = parseInt(newArray[1].substring(1)) + 1;
+      let newPoint = `${newArray[0]} C${newC}`;
+      document.getElementsByClassName(newPoint)[0].classList.add("snakeTile");
+      console.log(newPoint);
+    }
+    if (e.key == "s") {
+      console.log("down");
+      let newArray = startingPoint.split(" ");
+      let newR = parseInt(newArray[0].substring(1)) + 1;
+      let newPoint = `R${newR} ${newArray[1]}`;
+      document.getElementsByClassName(newPoint)[0].classList.add("snakeTile");
+      console.log(newPoint);
     }
   });
-  //listen to Keyboard WASD keys
 }
 
 function randomizer(x) {
