@@ -1,0 +1,41 @@
+.tile {
+  height: 20px;
+  width: 20px;
+  border: solid 1px black;
+}
+
+.darkred {
+  background: rgb(133, 2, 2);
+}
+
+.lightred {
+  background: rgb(187, 0, 0);
+}
+
+.playingFieldContainer {
+  position: relative;
+}
+
+.gameContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  z-index: -1;
+}
+
+.snakeContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  z-index: 2;
+}
+
+.snakeTile {
+  background: rgb(198, 198, 249);
+  border: solid 1px black;
+  border-radius: 6px;
+  height: 20px;
+  width: 20px;
+}
