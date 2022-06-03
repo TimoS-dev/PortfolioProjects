@@ -1,6 +1,14 @@
 const field = document.getElementById("gameContainer");
 const snakeField = document.getElementById("snakeContainer");
 
+let snakeHead = "";
+let foodLocation = "";
+
+window.addEventListener("load", function () {
+  createField(15);
+  didTheSnakeEat();
+});
+
 function createField(x) {
   let fieldCounter = 0;
   for (i = 0; i < x; i++) {
@@ -42,48 +50,132 @@ function createSnakeField(x) {
   }
 }
 
+function createFood() {
+  let currentPosition = randomizer(15);
+  document.getElementsByClassName(currentPosition)[0].classList.add("foodTile");
+  foodLocation = currentPosition;
+}
+
+function didTheSnakeEat() {
+  setInterval(function test1() {
+    if (snakeHead == foodLocation && foodLocation !== "") {
+      document
+        .getElementsByClassName(snakeHead)[0]
+        .classList.remove("foodTile");
+      createFood();
+    }
+  }, 100);
+}
+
 function startGame() {
-  const startingPoint = randomizer(15);
-  console.log(startingPoint);
-  document.getElementsByClassName(startingPoint)[0].classList.add("snakeTile");
-  //initialize array + array logic depending of keys
-  //listen to Keyboard WASD keys
-  window.addEventListener("keydown", (e) => {
-    if (e.key == "w") {
-      console.log("up");
-      let newArray = startingPoint.split(" ");
+  let currentPosition = randomizer(15);
+  snakeHead = currentPosition;
+  let snakeArray = [currentPosition];
+  document
+    .getElementsByClassName(currentPosition)[0]
+    .classList.add("snakeTile");
+  createFood();
+  //initialize array + array logic depending on keys + continous movement
+  let direction = "";
+  setInterval(function test() {
+    if (direction == "up") {
+      let newArray = currentPosition.split(" ");
       let newR = parseInt(newArray[0].substring(1)) - 1;
       let newPoint = `R${newR} ${newArray[1]}`;
       document.getElementsByClassName(newPoint)[0].classList.add("snakeTile");
-      console.log(newPoint);
+      currentPosition = newPoint;
+      snakeHead = newPoint;
+      snakeArray.push(newPoint);
+      if (snakeHead == foodLocation) {
+        console.log("snake grows!");
+      } else {
+        document
+          .getElementsByClassName(snakeArray.shift())[0]
+          .classList.remove("snakeTile");
+      }
     }
-    if (e.key == "a") {
-      console.log("left");
-      let newArray = startingPoint.split(" ");
+    if (direction == "left") {
+      let newArray = currentPosition.split(" ");
       let newC = parseInt(newArray[1].substring(1)) - 1;
       let newPoint = `${newArray[0]} C${newC}`;
       document.getElementsByClassName(newPoint)[0].classList.add("snakeTile");
-      console.log(newPoint);
+      currentPosition = newPoint;
+      snakeHead = newPoint;
+      snakeArray.push(newPoint);
+      if (snakeHead == foodLocation) {
+        console.log("snake grows!");
+      } else {
+        document
+          .getElementsByClassName(snakeArray.shift())[0]
+          .classList.remove("snakeTile");
+      }
     }
-    if (e.key == "d") {
-      console.log("right");
-      let newArray = startingPoint.split(" ");
+    if (direction == "right") {
+      let newArray = currentPosition.split(" ");
       let newC = parseInt(newArray[1].substring(1)) + 1;
       let newPoint = `${newArray[0]} C${newC}`;
       document.getElementsByClassName(newPoint)[0].classList.add("snakeTile");
-      console.log(newPoint);
+      currentPosition = newPoint;
+      snakeHead = newPoint;
+      snakeArray.push(newPoint);
+      if (snakeHead == foodLocation) {
+        console.log("snake grows!");
+      } else {
+        document
+          .getElementsByClassName(snakeArray.shift())[0]
+          .classList.remove("snakeTile");
+      }
     }
-    if (e.key == "s") {
-      console.log("down");
-      let newArray = startingPoint.split(" ");
+    if (direction == "down") {
+      let newArray = currentPosition.split(" ");
       let newR = parseInt(newArray[0].substring(1)) + 1;
       let newPoint = `R${newR} ${newArray[1]}`;
       document.getElementsByClassName(newPoint)[0].classList.add("snakeTile");
-      console.log(newPoint);
+      currentPosition = newPoint;
+      snakeHead = newPoint;
+      snakeArray.push(newPoint);
+      if (snakeHead == foodLocation) {
+        console.log("snake grows!");
+      } else {
+        document
+          .getElementsByClassName(snakeArray.shift())[0]
+          .classList.remove("snakeTile");
+      }
+    }
+    console.log(snakeHead + foodLocation);
+  }, 1000);
+  //listen to Keyboard WASD keys
+  window.addEventListener("keydown", (e) => {
+    if (e.key == "w") {
+      let newArray = currentPosition.split(" ");
+      let newR = parseInt(newArray[0].substring(1)) - 1;
+      let newPoint = `R${newR} ${newArray[1]}`;
+      document.getElementsByClassName(newPoint)[0].classList.add("snakeTile");
+      direction = "up";
+    }
+    if (e.key == "a") {
+      let newArray = currentPosition.split(" ");
+      let newC = parseInt(newArray[1].substring(1)) - 1;
+      let newPoint = `${newArray[0]} C${newC}`;
+      document.getElementsByClassName(newPoint)[0].classList.add("snakeTile");
+      direction = "left";
+    }
+    if (e.key == "d") {
+      let newArray = currentPosition.split(" ");
+      let newC = parseInt(newArray[1].substring(1)) + 1;
+      let newPoint = `${newArray[0]} C${newC}`;
+      document.getElementsByClassName(newPoint)[0].classList.add("snakeTile");
+      direction = "right";
+    }
+    if (e.key == "s") {
+      let newArray = currentPosition.split(" ");
+      let newR = parseInt(newArray[0].substring(1)) + 1;
+      let newPoint = `R${newR} ${newArray[1]}`;
+      document.getElementsByClassName(newPoint)[0].classList.add("snakeTile");
+      direction = "down";
     }
   });
 }
-
 function randomizer(x) {
   const row = Math.ceil(Math.random() * x);
   const column = Math.ceil(Math.random() * x);
