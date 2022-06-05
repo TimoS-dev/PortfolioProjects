@@ -1,3 +1,9 @@
+.windowContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .tile {
   height: 20px;
   width: 20px;
@@ -14,6 +20,7 @@
 
 .playingFieldContainer {
   position: relative;
+  transform: translateX(-165px);
 }
 
 .gameContainer {

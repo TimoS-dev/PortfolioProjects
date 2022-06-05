@@ -1,8 +1,11 @@
 const field = document.getElementById("gameContainer");
 const snakeField = document.getElementById("snakeContainer");
+const pointCounter = document.getElementById("pointCounter");
 
 let snakeHead = "";
 let foodLocation = "";
+let points = 0;
+let snakeArray = [];
 
 window.addEventListener("load", function () {
   createField(15);
@@ -49,13 +52,11 @@ function createSnakeField(x) {
     snakeField.appendChild(container);
   }
 }
-
 function createFood() {
   let currentPosition = randomizer(15);
   document.getElementsByClassName(currentPosition)[0].classList.add("foodTile");
   foodLocation = currentPosition;
 }
-
 function didTheSnakeEat() {
   setInterval(function test1() {
     if (snakeHead == foodLocation && foodLocation !== "") {
@@ -63,31 +64,52 @@ function didTheSnakeEat() {
         .getElementsByClassName(snakeHead)[0]
         .classList.remove("foodTile");
       createFood();
+      points = points + 1;
+      pointCounter.innerHTML = points;
     }
   }, 100);
 }
 
+function checkGameOver(x) {
+  let splitting = x.split(" ");
+  let testArray = snakeArray;
+  testArray = testArray.pop();
+  console.log(snakeArray);
+  console.log(testArray);
+  if (testArray.length >= 1) {
+    if (testArray == snakeHead) {
+      console.log("not good");
+    }
+  }
+  if (
+    splitting[0] == "R0" ||
+    splitting[0] == "R16" ||
+    splitting[1] == "C0" ||
+    splitting[1] == "C16"
+  ) {
+    alert("game over");
+  }
+}
 function startGame() {
   let currentPosition = randomizer(15);
   snakeHead = currentPosition;
-  let snakeArray = [currentPosition];
+  snakeArray = [currentPosition];
   document
     .getElementsByClassName(currentPosition)[0]
     .classList.add("snakeTile");
   createFood();
-  //initialize array + array logic depending on keys + continous movement
   let direction = "";
   setInterval(function test() {
     if (direction == "up") {
       let newArray = currentPosition.split(" ");
       let newR = parseInt(newArray[0].substring(1)) - 1;
       let newPoint = `R${newR} ${newArray[1]}`;
+      checkGameOver(newPoint);
       document.getElementsByClassName(newPoint)[0].classList.add("snakeTile");
       currentPosition = newPoint;
       snakeHead = newPoint;
       snakeArray.push(newPoint);
       if (snakeHead == foodLocation) {
-        console.log("snake grows!");
       } else {
         document
           .getElementsByClassName(snakeArray.shift())[0]
@@ -98,12 +120,12 @@ function startGame() {
       let newArray = currentPosition.split(" ");
       let newC = parseInt(newArray[1].substring(1)) - 1;
       let newPoint = `${newArray[0]} C${newC}`;
+      checkGameOver(newPoint);
       document.getElementsByClassName(newPoint)[0].classList.add("snakeTile");
       currentPosition = newPoint;
       snakeHead = newPoint;
       snakeArray.push(newPoint);
       if (snakeHead == foodLocation) {
-        console.log("snake grows!");
       } else {
         document
           .getElementsByClassName(snakeArray.shift())[0]
@@ -114,12 +136,12 @@ function startGame() {
       let newArray = currentPosition.split(" ");
       let newC = parseInt(newArray[1].substring(1)) + 1;
       let newPoint = `${newArray[0]} C${newC}`;
+      checkGameOver(newPoint);
       document.getElementsByClassName(newPoint)[0].classList.add("snakeTile");
       currentPosition = newPoint;
       snakeHead = newPoint;
       snakeArray.push(newPoint);
       if (snakeHead == foodLocation) {
-        console.log("snake grows!");
       } else {
         document
           .getElementsByClassName(snakeArray.shift())[0]
@@ -130,49 +152,52 @@ function startGame() {
       let newArray = currentPosition.split(" ");
       let newR = parseInt(newArray[0].substring(1)) + 1;
       let newPoint = `R${newR} ${newArray[1]}`;
+      checkGameOver(newPoint);
       document.getElementsByClassName(newPoint)[0].classList.add("snakeTile");
       currentPosition = newPoint;
       snakeHead = newPoint;
       snakeArray.push(newPoint);
       if (snakeHead == foodLocation) {
-        console.log("snake grows!");
       } else {
         document
           .getElementsByClassName(snakeArray.shift())[0]
           .classList.remove("snakeTile");
       }
     }
-    console.log(snakeHead + foodLocation);
-  }, 1000);
+  }, 500);
   //listen to Keyboard WASD keys
   window.addEventListener("keydown", (e) => {
-    if (e.key == "w") {
-      let newArray = currentPosition.split(" ");
-      let newR = parseInt(newArray[0].substring(1)) - 1;
-      let newPoint = `R${newR} ${newArray[1]}`;
-      document.getElementsByClassName(newPoint)[0].classList.add("snakeTile");
-      direction = "up";
-    }
-    if (e.key == "a") {
-      let newArray = currentPosition.split(" ");
-      let newC = parseInt(newArray[1].substring(1)) - 1;
-      let newPoint = `${newArray[0]} C${newC}`;
-      document.getElementsByClassName(newPoint)[0].classList.add("snakeTile");
-      direction = "left";
-    }
-    if (e.key == "d") {
-      let newArray = currentPosition.split(" ");
-      let newC = parseInt(newArray[1].substring(1)) + 1;
-      let newPoint = `${newArray[0]} C${newC}`;
-      document.getElementsByClassName(newPoint)[0].classList.add("snakeTile");
-      direction = "right";
-    }
-    if (e.key == "s") {
-      let newArray = currentPosition.split(" ");
-      let newR = parseInt(newArray[0].substring(1)) + 1;
-      let newPoint = `R${newR} ${newArray[1]}`;
-      document.getElementsByClassName(newPoint)[0].classList.add("snakeTile");
-      direction = "down";
+    switch (e.key) {
+      case "w":
+      case "ArrowUp":
+        if (direction == "down") {
+          break;
+        }
+        direction = "up";
+        break;
+      case "a":
+      case "ArrowLeft":
+        if (direction == "right") {
+          break;
+        }
+        direction = "left";
+        break;
+      case "d":
+      case "ArrowRight":
+        if (direction == "left") {
+          break;
+        }
+        direction = "right";
+        break;
+      case "s":
+      case "ArrowDown":
+        if (direction == "up") {
+          break;
+        }
+        direction = "down";
+        break;
+      default:
+        break;
     }
   });
 }
