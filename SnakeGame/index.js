@@ -7,6 +7,8 @@ let foodLocation = "";
 let points = 0;
 let snakeArray = [];
 
+let intervalID;
+
 window.addEventListener("load", function () {
   createField(15);
   didTheSnakeEat();
@@ -69,17 +71,19 @@ function didTheSnakeEat() {
     }
   }, 100);
 }
-
+function countInArray(array, what) {
+  return array.filter((item) => item == what).length;
+}
+function gameOver() {
+  alert("game over");
+  clearInterval(intervalID);
+}
 function checkGameOver(x) {
   let splitting = x.split(" ");
-  let testArray = snakeArray;
-  testArray = testArray.pop();
+  console.log(snakeHead);
   console.log(snakeArray);
-  console.log(testArray);
-  if (testArray.length >= 1) {
-    if (testArray == snakeHead) {
-      console.log("not good");
-    }
+  if (countInArray(snakeArray, snakeHead) >= 2 && snakeArray.length > 2) {
+    alert("game over");
   }
   if (
     splitting[0] == "R0" ||
@@ -87,19 +91,18 @@ function checkGameOver(x) {
     splitting[1] == "C0" ||
     splitting[1] == "C16"
   ) {
-    alert("game over");
+    gameOver();
   }
 }
 function startGame() {
   let currentPosition = randomizer(15);
-  snakeHead = currentPosition;
-  snakeArray = [currentPosition];
+  snakeHead = snakeArray[0] = [currentPosition];
   document
     .getElementsByClassName(currentPosition)[0]
     .classList.add("snakeTile");
   createFood();
   let direction = "";
-  setInterval(function test() {
+  intervalID = setInterval(function test() {
     if (direction == "up") {
       let newArray = currentPosition.split(" ");
       let newR = parseInt(newArray[0].substring(1)) - 1;
